@@ -3,7 +3,7 @@ FROM centos
 LABEL MAINTAINER="xiaofei.wang@bwoil.com"
 
 # download and tar sqlrelay
-RUN yum -y install wget openssl krb5-libs pcre libcurl readline perl php php-pdo python ruby ruby-libs tcl java-1.7.0-openjdk mariadb-libs postgresql-libs sqlite unixODBC libaio
+RUN yum -y install wget openssl krb5-libs pcre libcurl readline mariadb-libs postgresql-libs libaio
 
 RUN cd /opt/ && \
     wget https://jaist.dl.sourceforge.net/project/sqlrelay/sqlrelay/1.5.2/sqlrelay-binary-distribution-1.5.2.tar.gz && \
