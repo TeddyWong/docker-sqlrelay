@@ -1,0 +1,35 @@
+version: "3.1"
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'moldb'
+      MYSQL_ROOT_PASSWORD: '123456'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./my-db:/var/lib/mysql
+    networks:
+      relay:
+        aliases:
+          - mysql
+  sqlrelay:
+    container_name: sqlrelay
+    image: mol/sqlrelay
+    ports:
+      - "5566:5566"
+    restart: always
+    volumes:
+      - ./sqlrelay.conf:/etc/sqlrelay.conf
+      - ./var:/var
+    networks:
+      relay:
+        aliases:
+          - sqlrelay
+    depends_on:
+      - mysql
+
+networks:
+  relay:

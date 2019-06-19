@@ -13,7 +13,8 @@ To run the container, do the following(for example):
 start 
 
 ```sh 
-docker run -p xx:xx -v /xx:/xx -t -i -d cbping/sqlrelay /bin/bash
+docker run -p xx:xx -v /xx:/xx -t -i -d mol/sqlrelay /bin/bash
+docker run -t -i -d mol/sqlrelay /bin/bash
 ``` 
 
 then 

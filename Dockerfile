@@ -1,45 +1,27 @@
 FROM centos
 
-MAINTAINER cbping "452775680@qq.com"
-
-# Compile environment installation
-RUN yum -y install gcc-c++ make readline-devel openssl-devel krb5-devel libcurl-devel  \
-   #  pcre-devel perl-devel php-devel php-pdo \
-   #  python-devel ruby-devel ruby-libs ruby tcl-devel java-1.7.0-openjdk-devel \
-   #  mariadb-devel postgresql-devel sqlite-devel unixODBC-devel
+LABEL MAINTAINER="xiaofei.wang@bwoil.com"
 
 # download and tar sqlrelay
-RUN yum -y install wget && \
-    cd /opt/ && \
-	wget http://downloads.sourceforge.net/sqlrelay/sqlrelay-1.1.0.tar.gz &&  \
-	wget http://downloads.sourceforge.net/rudiments/rudiments-1.0.5.tar.gz && \
+RUN yum -y install wget openssl krb5-libs pcre libcurl readline perl php php-pdo python ruby ruby-libs tcl java-1.7.0-openjdk mariadb-libs postgresql-libs sqlite unixODBC libaio
+
+RUN cd /opt/ && \
+    wget https://jaist.dl.sourceforge.net/project/sqlrelay/sqlrelay/1.5.2/sqlrelay-binary-distribution-1.5.2.tar.gz && \
     cd /opt/  && \
-    tar -xvf  rudiments-1.0.5.tar.gz && \
-    tar -xvf  sqlrelay-1.1.0.tar.gz
+    tar -xvf  sqlrelay-binary-distribution-1.5.2.tar.gz && \
+    cd /opt/sqlrelay-binary-distribution-1.5.2/centos7x64  && \
+    yum -y localinstall * && \
+    rm -f /opt/sqlrelay-binary-distribution-1.5.2.tar.gz  && \
+    rm -rf /opt/sqlrelay-binary-distribution-1.5.2
 
-# build and install sqlrelay
-RUN cd /opt/rudiments-1.0.5 &&\
-    ./configure --prefix=/opt/firstworks &&\
-    make && make install
-
-RUN cd /opt/sqlrelay-1.1.0 && \ 
-    ./configure --prefix=/opt/firstworks  --with-rudiments-prefix=/opt/firstworks \
-    --disable-oracle --disable-postgresql --disable-sap --disable-odbc --disable-db2  --disable-firebird \
-    --disable-informix --disable-router --disable-odbc-driver --disable-perl --disable-python --disable-ruby \
-    --disable-java --disable-tcl  --disable-php --disable-nodejs --disable-cs  &&\
-    make && make install
-
-# Delete residual useless files and installed
-RUN rm -f /opt/rudiments-1.0.5.tar.gz && \
-    rm -f /opt/sqlrelay-1.1.0.tar.gz  && \
-    rm -rf /opt/rudiments-1.0.5       && \
-    rm -rf /opt/sqlrelay-1.1.0        && \
-    yum -y remove wget krb5-devel*  libcurl-devel*
-
-
-ENV PATH /opt/firstworks/bin:$PATH
-
+# ENV PATH /usr/local/firstworks/bin:$PATH
+# RUN yum install -y iputils
 COPY sqlr-entrypoint.sh /opt/bin/sqlr-entrypoint.sh
-ENV PATH /opt/bin:$PATH
-ENTRYPOINT ["sqlr-entrypoint.sh"]
+RUN chmod +x /opt/bin/sqlr-entrypoint.sh
+
+# RUN groupadd -r sqlrelay && useradd -r -g sqlrelay sqlrelay
+# RUN chgrp -R sqlrelay /var
+# RUN chown -R sqlrelay /var
+
+ENTRYPOINT ["/opt/bin/sqlr-entrypoint.sh"]
 
