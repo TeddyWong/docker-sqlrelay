@@ -23,8 +23,8 @@ services:
     restart: always
     volumes:
       - ./sqlrelay.conf:/etc/sqlrelay.conf
-      - ./var/run/sqlrelay:/root/run/sqlrelay
-      - ./var/log/sqlrelay:/root/log/sqlrelay
+      # - ./var/run/sqlrelay:/root/run/sqlrelay
+      # - ./var/log/sqlrelay:/root/log/sqlrelay
     networks:
       relay:
         aliases:
