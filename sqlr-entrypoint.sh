@@ -1,3 +1,5 @@
 #!/bin/bash -e
-sqlr-start
+rm -f /root/run/sqlrelay/*.pid
+sleep 5
+sqlr-start -localstatedir /root/
 tail -f

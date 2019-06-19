@@ -20,8 +20,9 @@ COPY sqlr-entrypoint.sh /opt/bin/sqlr-entrypoint.sh
 RUN chmod +x /opt/bin/sqlr-entrypoint.sh
 
 # RUN groupadd -r sqlrelay && useradd -r -g sqlrelay sqlrelay
-# RUN chgrp -R sqlrelay /var
-# RUN chown -R sqlrelay /var
+# RUN chgrp -R root /var
+# RUN chown -R root /var
+RUN mkdir /root/run && mkdir /root/run/sqlrelay && mkdir /root/log && mkdir /root/log/sqlrelay
 
 ENTRYPOINT ["/opt/bin/sqlr-entrypoint.sh"]
 
